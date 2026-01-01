@@ -1,15 +1,33 @@
 ﻿// See https://aka.ms/new-console-template for more information
+using System.Collections;
 using System.Data;
+using System.Diagnostics;
 
-Console.WriteLine("Program do wyświetlania kalendarza");
+Console.WriteLine("Program do wyświetlania kalendarza\n");
 
 //Wyswietlenie roku
-WyswietlMiesiac(2026, 1);
+for (int i = 1; i <= 12; i++)
+{
+    WyswietlMiesiac(2026, i);
+    Console.WriteLine();
+}
 
 static void WyswietlMiesiac(int rok, int miesiac)
 {
     //Ustawienie odpowiedniej daty
     DateTime data = new DateTime(rok, miesiac, 1);
+
+    //Ustawienie nazw dni
+    string[] dni =
+    {
+        "pn",
+        "wt",
+        "śr",
+        "cz",
+        "pt",
+        "so",
+        "ni"
+    };
 
     //Wyswietlenie poczatku miesiaca
     Console.ForegroundColor = ConsoleColor.DarkGreen;
@@ -18,31 +36,76 @@ static void WyswietlMiesiac(int rok, int miesiac)
         sline += "-";
     sline += "+";
     Console.WriteLine(sline);
-    Console.Write("+");
+    Console.Write("|");
     Console.ForegroundColor = ConsoleColor.DarkYellow;
     Console.Write($"{data.ToString("MMMM"),-21}");
     Console.ForegroundColor = ConsoleColor.DarkGreen;
-    Console.WriteLine("+");
+    Console.WriteLine("|");
     Console.WriteLine(sline);
+    Console.Write("|");
+    Console.ForegroundColor = ConsoleColor.DarkGray;
+    foreach (string dzientyg in dni)
+        Console.Write($"{dzientyg,3}");
+    Console.ForegroundColor = ConsoleColor.DarkGreen;
+    Console.WriteLine("|");
+    Console.WriteLine(sline);
+    Console.ResetColor();
 
     //Wyswietlenie miesiaca
     int dzien = 1;
     do
     {
+        //Wypisanie początku wiersza
         Console.ForegroundColor = ConsoleColor.DarkGreen;
         Console.Write("|");
+        Console.ResetColor();
+
+        //Wypisanie tygodnia
         for (int dzientyg = 1; dzientyg <= 7; dzientyg++)
         {
-            //Sprawdzennie czy jest w zakresie na poczatkowym
-            if (dzientyg < ((int)data.DayOfWeek + 15)%8 )
+            //Ustawienie koloru dnia
+            switch (dzientyg)
             {
-                Console.WriteLine("   ");
-                continue;
+                case 6:
+                    Console.ForegroundColor = ConsoleColor.DarkGray;
+                    break;
+                case 7:
+                    Console.ForegroundColor = ConsoleColor.DarkRed;
+                    break;
+                default:
+                    break;
             }
 
-            //Sprawdzenie w zakresie końcowym
-            if(dzientyg)
-
+            //Sprawdzennie czy jest w zakresie na poczatkowym i końcowym
+            if (dzientyg != ((int)data.DayOfWeek + 6) % 7 + 1)
+            {
+                Console.Write("   ");
+                continue;
+            }
+            //Wypisanie daty
+            if (dzien < DateTime.DaysInMonth(rok, miesiac))
+            {
+                Console.Write($"{dzien,3}");
+                dzien++;
+                data = data.AddDays(1);
+                Console.ResetColor();
+            }
+            else
+            {
+                Console.Write($"{dzien,3}");
+                dzien++;
+            }
         }
+
+        //Wypisanie końca wiersza
+        Console.ForegroundColor = ConsoleColor.DarkGreen;
+        Console.WriteLine("|");
+        Console.ResetColor();
     }
+    while (dzien <= DateTime.DaysInMonth(rok, miesiac));
+
+    //Wyswietlenie końca miesiąca
+    Console.ForegroundColor = ConsoleColor.DarkGreen;
+    Console.WriteLine(sline);
+    Console.ResetColor();
 }
