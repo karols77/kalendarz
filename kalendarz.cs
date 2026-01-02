@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Data;
 using System.Diagnostics;
+using System.Reflection.Metadata;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
@@ -26,7 +27,7 @@ while (true)
             Console.ForegroundColor = ConsoleColor.DarkRed;
             Console.WriteLine("Niepoprawny zakres roku. Powinien być w zakresie [1-10000].");
             continue;
-        } 
+        }
 
         //Zapytanie o liczbę miesięcy w rzędzie    
         Console.ForegroundColor = ConsoleColor.DarkGray;
@@ -92,7 +93,7 @@ class Rok
     public void WypiszRok()
     {
         //Wypisanie nagłówka
-        for (int i = 1; i < _ilemrzad / 2 - 4 - _rok.ToString().Length; i++)
+        for (int i = 1; i < _ilemrzad * 23/2 - 2 + _rok.ToString().Length / 2; i++)
             Console.Write(" ");
         Console.ForegroundColor = ConsoleColor.DarkCyan;
         Console.Write("Rok ");
@@ -140,6 +141,20 @@ class Miesiac
 
     //Wyliczenie
     enum Tryb : int { Naglowek, Data, Koncowka, Pusty }
+
+    #region Funkcje statyczne
+    static void WypiszMiesiac(int rok, int miesiac)
+    {
+        //Wypisanie tylko miesiąca
+        Miesiac miesiacb = new Miesiac(rok, miesiac);
+        bool kontynuuj;
+        do
+        {
+            kontynuuj = miesiacb.WypiszWiersz();
+        }
+        while (kontynuuj);
+    }
+    #endregion
 
     #region Miesiac_Konstruktor
     public Miesiac(int rok, int miesiac)
