@@ -180,6 +180,7 @@ class Miesiac
                 wypisane = false;
                 break;
         }
+        _wiersz++;
         return wypisane;
     }
     private void WypiszPuste()
@@ -220,7 +221,6 @@ class Miesiac
                 break;
         }
         Console.ResetColor();
-        _wiersz++;
     }
     private bool WypiszDaty()
     {
